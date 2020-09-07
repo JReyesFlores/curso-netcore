@@ -21,8 +21,7 @@ namespace CoreEscuela
         {
             
             Printer.WriteTitle("Cursos de la Escuela");
-            
-            
+             
             if (escuela?.Cursos != null)
             {
                 foreach (var curso in escuela.Cursos)
