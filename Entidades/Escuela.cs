@@ -1,17 +1,11 @@
 using System;
 using System.Collections.Generic;
+using Etapa5.Entidades;
 
 namespace CoreEscuela.Entidades
 {
-    public class Escuela
-    {
-        public string UniqueId { get; private set; } = Guid.NewGuid().ToString();
-        string nombre;
-        public string Nombre
-        {
-            get { return "Copia:" + nombre; }
-            set { nombre = value.ToUpper(); }
-        }
+    public class Escuela : ObjetoEscuelaBase
+    {  
         public int AñoDeCreación { get; set; }
 
         public string Pais { get; set; }

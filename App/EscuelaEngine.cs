@@ -5,7 +5,8 @@ using CoreEscuela.Entidades;
 
 namespace CoreEscuela
 {
-    public class EscuelaEngine
+    //SEALED => Esta clase puede ser instanciada y crear objetos, pero no puede ser heredada
+    public sealed class EscuelaEngine
     {
         public Escuela Escuela { get; set; }
 
@@ -31,20 +32,21 @@ namespace CoreEscuela
             var listCursos = this.Escuela.Cursos.ToList();
             foreach (var cur in listCursos) {
                 foreach(var asi in cur.Asignaturas) {
-                    foreach (var alu in cur.Alumnos) {
-                        //Inicializando la lista
-                        alu.Evaluaciones = new List<Evaluaciones>();
+                    foreach (var alu in cur.Alumnos) { 
+                        var listEval = new List<Evaluacion>();
 
                         //5 evaluaciones por asignatura
                         for (int i = 1; i <= 5; i++) {  
                             var rnd = new Random();
-                            var nuevaEval = new Evaluaciones();
+                            var nuevaEval = new Evaluacion();
                             nuevaEval.Alumno = alu;
                             nuevaEval.Asignatura = asi;
                             nuevaEval.Nombre = $"Evaluacion #{i}";
                             nuevaEval.Nota = (float) (5 * rnd.NextDouble());
-                            alu.Evaluaciones.Add(nuevaEval);
+                            listEval.Add(nuevaEval);
                         }
+
+                        alu.Evaluaciones.AddRange(listEval);
                     }
                 }
             }
