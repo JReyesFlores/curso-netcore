@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using CoreEscuela.Entidades;
+using Etapa5.Entidades;
 
 namespace CoreEscuela
 {
@@ -17,7 +18,7 @@ namespace CoreEscuela
 
         public void Inicializar()
         {
-            Escuela = new Escuela("Platzi Academay", 2012, TiposEscuela.Primaria,
+            Escuela = new Escuela("Platzi Academy", 2012, TiposEscuela.Primaria,
             ciudad: "Bogotá", pais: "Colombia"
             );
 
@@ -27,6 +28,7 @@ namespace CoreEscuela
 
         }
 
+        #region Métodos de carga
         private void CargarEvaluaciones()
         {
             var listCursos = this.Escuela.Cursos.ToList();
@@ -83,11 +85,11 @@ namespace CoreEscuela
         private void CargarCursos()
         {
             Escuela.Cursos = new List<Curso>(){
-                        new Curso(){ Nombre = "101", Jornada = TiposJornada.Mañana },
-                        new Curso() {Nombre = "201", Jornada = TiposJornada.Mañana},
-                        new Curso{Nombre = "301", Jornada = TiposJornada.Mañana},
-                        new Curso(){ Nombre = "401", Jornada = TiposJornada.Tarde },
-                        new Curso() {Nombre = "501", Jornada = TiposJornada.Tarde},
+                        new Curso() { Nombre = "101", Jornada = TiposJornada.Mañana },
+                        new Curso() { Nombre = "201", Jornada = TiposJornada.Mañana },
+                        new Curso() { Nombre = "301", Jornada = TiposJornada.Mañana },
+                        new Curso() { Nombre = "401", Jornada = TiposJornada.Tarde },
+                        new Curso() { Nombre = "501", Jornada = TiposJornada.Tarde },
             };
             
             Random rnd = new Random();
@@ -96,6 +98,90 @@ namespace CoreEscuela
                 int cantRandom = rnd.Next(5, 20);
                 c.Alumnos = GenerarAlumnosAlAzar(cantRandom);
             }
+        
         }
+
+        /*
+        * Sobrecargar del método
+        */
+        public List<ObjetoEscuelaBase> GetObjetoEscuelaBases(
+                        bool traeCursos = true,
+                        bool traeAsignaturas = true,
+                        bool traeAlumnos = true, 
+                        bool traeEvaluaciones = true){
+            return GetObjetoEscuelaBases(out int dummy,out dummy, out dummy, out dummy);
+        }
+
+        public List<ObjetoEscuelaBase> GetObjetoEscuelaBases(
+                        out int conteoEvaluaciones,
+                        bool traeCursos = true,
+                        bool traeAsignaturas = true,
+                        bool traeAlumnos = true, 
+                        bool traeEvaluaciones = true){
+            return GetObjetoEscuelaBases(out conteoEvaluaciones,out int dummy, out dummy, out dummy);
+        }
+
+        public List<ObjetoEscuelaBase> GetObjetoEscuelaBases(
+                        out int conteoEvaluaciones,
+                        out int conteoCursos,
+                        bool traeCursos = true,
+                        bool traeAsignaturas = true,
+                        bool traeAlumnos = true, 
+                        bool traeEvaluaciones = true){
+            return GetObjetoEscuelaBases(out conteoEvaluaciones,out conteoCursos, out int dummy, out dummy);
+        }
+
+        public List<ObjetoEscuelaBase> GetObjetoEscuelaBases(
+                        out int conteoEvaluaciones,
+                        out int conteoCursos,
+                        out int conteoAsignaturas,
+                        bool traeCursos = true,
+                        bool traeAsignaturas = true,
+                        bool traeAlumnos = true, 
+                        bool traeEvaluaciones = true){
+            return GetObjetoEscuelaBases(out conteoEvaluaciones,out conteoCursos, out conteoAsignaturas, out int dummy);
+        }
+
+        public List<ObjetoEscuelaBase> GetObjetoEscuelaBases(
+                        out int conteoEvaluaciones,
+                        out int conteoCursos,
+                        out int conteoAsignaturas,
+                        out int conteoAlumnos,
+                        bool traeCursos = true,
+                        bool traeAsignaturas = true,
+                        bool traeAlumnos = true, 
+                        bool traeEvaluaciones = true) 
+        {
+            conteoEvaluaciones = 0;
+            conteoCursos = 0;
+            conteoAsignaturas = 0;
+            conteoAlumnos = 0;
+            
+            var listObj = new List<ObjetoEscuelaBase>();
+            listObj.Add(Escuela);
+ 
+            listObj.AddRange(Escuela.Cursos);
+            conteoCursos = Escuela.Cursos.Count;
+            foreach (var item in Escuela.Cursos)
+            {
+                if(traeAsignaturas) listObj.AddRange(item.Asignaturas);   
+
+                conteoAsignaturas += item.Asignaturas.Count;
+                if(traeAlumnos) listObj.AddRange(item.Alumnos);
+
+                conteoAlumnos += item.Alumnos.Count;
+                if(traeEvaluaciones){
+                    foreach (var item2 in item.Alumnos)
+                    {
+                        listObj.AddRange(item2.Evaluaciones);
+                        conteoEvaluaciones += item2.Evaluaciones.Count;
+                    }
+                } 
+            }
+
+            return listObj;
+        }
+
+        #endregion
     }
 }
