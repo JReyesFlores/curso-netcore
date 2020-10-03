@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using CoreEscuela.App;
 using CoreEscuela.Entidades;
 using CoreEscuela.Util;
 using Etapa5.Entidades;
@@ -12,12 +13,27 @@ namespace CoreEscuela
     {
         static void Main(string[] args)
         {
+            AppDomain.CurrentDomain.ProcessExit += AccionDelEvento;
+            //AppDomain.CurrentDomain.ProcessExit += (o,s) => Printer.Beep(1200,1000,1);
+            AppDomain.CurrentDomain.ProcessExit -= AccionDelEvento;
+
             var engine = new EscuelaEngine();
             engine.Inicializar();
             Printer.WriteTitle("BIENVENIDOS A LA ESCUELA");
             //Printer.Beep(10000, cantidad:10);
             ImpimirCursosEscuela(engine.Escuela);  
-            //var lista = engine.GetObjetoEscuelaBases(); 
+            var lista = engine.GetObjetoEscuelaBases(); 
+           
+            var dic2 = engine.GetDiccionarioObjetos();
+            engine.ImprimirDiccionario(dic2,true);
+
+            var reporteador = new Reporteador(dic2);
+            var evaluaciones = reporteador.GetListaEvaluaciones();
+            var asignaturas = reporteador.GetListaAsignaturas();
+            var listaEvalXAsig = reporteador.GetDicEvaluacionesxAsignatura();
+            var promedios = reporteador.GetPromediosAlumnosxAsignatura();
+
+            #region Comentarios
             /*
             Dictionary<int,string> diccionario= new Dictionary<int, string>();
             diccionario.Add(10,"Juanca"); //Equivalente: diccionario[23] = "Juanca;
@@ -37,9 +53,6 @@ namespace CoreEscuela
             WriteLine(dic["Luna"]);
             dic["Luna"] = "Protagonista de Soy Luna.";
             WriteLine(dic["Luna"]);*/
-
-            var dic2 = engine.GetDiccionarioObjetos();
-            engine.ImprimirDiccionario(dic2,true);
 
             /*
             var listILugar = from obj in lista
@@ -101,6 +114,15 @@ namespace CoreEscuela
                 //lógica para el caso..
             }
             */
+            #endregion
+        }
+
+        private static void AccionDelEvento(object sender, EventArgs e)
+        {
+            //throw new NotImplementedException();
+            Printer.WriteTitle("Saliendo");
+            Printer.Beep(3000,1000,3);
+            Printer.WriteTitle("SALIÓ");
         }
 
         private static void ImpimirCursosEscuela(Escuela escuela)
