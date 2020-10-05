@@ -21,19 +21,40 @@ namespace CoreEscuela
             engine.Inicializar();
             Printer.WriteTitle("BIENVENIDOS A LA ESCUELA");
             //Printer.Beep(10000, cantidad:10);
-            ImpimirCursosEscuela(engine.Escuela);  
-            var lista = engine.GetObjetoEscuelaBases(); 
-           
+            //ImpimirCursosEscuela(engine.Escuela);
+            var lista = engine.GetObjetoEscuelaBases();
+
             var dic2 = engine.GetDiccionarioObjetos();
-            engine.ImprimirDiccionario(dic2,true);
+            //engine.ImprimirDiccionario(dic2, true);
 
             var reporteador = new Reporteador(dic2);
             var evaluaciones = reporteador.GetListaEvaluaciones();
             var asignaturas = reporteador.GetListaAsignaturas();
             var listaEvalXAsig = reporteador.GetDicEvaluacionesxAsignatura();
             var promedios = reporteador.GetPromediosAlumnosxAsignatura();
-            var topPromedios = reporteador.GetTopPromedio(5);
+            var topPromedios = reporteador.GetTopPromedio(10);
 
+            Printer.WriteTitle("Captura de una nueva Evaluación por Consola");
+            var newEval = new Evaluacion(); //Nombre y Nota
+            string nombre, nota;
+
+            WriteLine("Ingrese el nombre de la evaluación:");
+            Printer.PresioneEnter();
+            nombre = ReadLine();
+
+            if (string.IsNullOrWhiteSpace(nombre)) throw new ArgumentNullException("El valor del nombre no puede ser null");
+            newEval.Nombre = nombre.ToLower();
+            WriteLine("Nombre de la evaluación ingresado correctamente!");
+
+            WriteLine("Ingrese la nota de la evaluación:");
+            Printer.PresioneEnter();
+            nota = ReadLine();
+
+            if (string.IsNullOrWhiteSpace(nota)) throw new ArgumentNullException("El valor de la nota no puede ser null");
+            if (!float.TryParse(nota, out float minota)) throw new ArgumentException("El valor de la nota debe ser un número float");
+            if (minota < 0 || minota > 5) throw new ArgumentOutOfRangeException("El valor de la nota esta fuera de rango");
+            newEval.Nota = minota;
+            WriteLine("Nota de la evaluación ingresado correctamente!");
             #region Comentarios
             /*
             Dictionary<int,string> diccionario= new Dictionary<int, string>();
@@ -59,9 +80,9 @@ namespace CoreEscuela
             var listILugar = from obj in lista
                              where obj is ILugar
                              select (ILugar) obj; 
-            */   
+            */
             //engine.Escuela.LimpiarLugar();
-            
+
             /*
             Printer.DrawLine(20);
             Printer.WriteTitle("PRUEBAS DE POLIMORFISMO");
@@ -122,15 +143,15 @@ namespace CoreEscuela
         {
             //throw new NotImplementedException();
             Printer.WriteTitle("Saliendo");
-            Printer.Beep(3000,1000,3);
+            Printer.Beep(3000, 1000, 3);
             Printer.WriteTitle("SALIÓ");
         }
 
         private static void ImpimirCursosEscuela(Escuela escuela)
         {
-            
+
             Printer.WriteTitle("Cursos de la Escuela");
-             
+
             if (escuela?.Cursos != null)
             {
                 foreach (var curso in escuela.Cursos)
