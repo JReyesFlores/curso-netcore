@@ -6,7 +6,7 @@ using CoreEscuela.Entidades;
 
 namespace CoreEscuela.App
 {
-    public class Reporteador
+    public sealed class Reporteador
     {
         Dictionary<LlaveDiccionario, IEnumerable<ObjetoEscuelaBase>> _diccionario;
         public Reporteador(Dictionary<LlaveDiccionario, IEnumerable<ObjetoEscuelaBase>> dicOb)

@@ -12,16 +12,10 @@ namespace CoreEscuela
     {
         public Escuela Escuela { get; set; }
 
-        public EscuelaEngine()
-        {
-
-        }
-
+        public EscuelaEngine() { }
         public void Inicializar()
         {
-            Escuela = new Escuela("Platzi Academy", 2012, TiposEscuela.Primaria,
-            ciudad: "Bogotá", pais: "Colombia"
-            );
+            Escuela = new Escuela("Platzi Academy", 2012, TiposEscuela.Primaria, ciudad: "Bogotá", pais: "Colombia");
 
             CargarCursos();
             CargarAsignaturas();

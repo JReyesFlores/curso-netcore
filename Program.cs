@@ -13,26 +13,29 @@ namespace CoreEscuela
     {
         static void Main(string[] args)
         {
+            //Eventos => Estos pueden ser agregados o elimnados dependiendo del caso
             AppDomain.CurrentDomain.ProcessExit += AccionDelEvento;
-            //AppDomain.CurrentDomain.ProcessExit += (o,s) => Printer.Beep(1200,1000,1);
+            AppDomain.CurrentDomain.ProcessExit += (o, s) => Printer.Beep(1200, 1000, 1);
             AppDomain.CurrentDomain.ProcessExit -= AccionDelEvento;
 
             var engine = new EscuelaEngine();
             engine.Inicializar();
             Printer.WriteTitle("BIENVENIDOS A LA ESCUELA");
             //Printer.Beep(10000, cantidad:10);
-            //ImpimirCursosEscuela(engine.Escuela);
+            ImpimirCursosEscuela(engine.Escuela);
             var lista = engine.GetObjetoEscuelaBases();
 
-            var dic2 = engine.GetDiccionarioObjetos();
-            //engine.ImprimirDiccionario(dic2, true);
+            var dicObjetos = engine.GetDiccionarioObjetos();
+            engine.ImprimirDiccionario(dicObjetos, true);
 
-            var reporteador = new Reporteador(dic2);
+            Printer.WriteTitle("Reportes...");
+            var reporteador = new Reporteador(dicObjetos);
             var evaluaciones = reporteador.GetListaEvaluaciones();
             var asignaturas = reporteador.GetListaAsignaturas();
             var listaEvalXAsig = reporteador.GetDicEvaluacionesxAsignatura();
             var promedios = reporteador.GetPromediosAlumnosxAsignatura();
             var topPromedios = reporteador.GetTopPromedio(10);
+            Printer.WriteTitle("Fin de reportes...");
 
             Printer.WriteTitle("Captura de una nueva Evaluación por Consola");
             var newEval = new Evaluacion(); //Nombre y Nota
