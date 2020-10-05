@@ -32,6 +32,7 @@ namespace CoreEscuela
             var asignaturas = reporteador.GetListaAsignaturas();
             var listaEvalXAsig = reporteador.GetDicEvaluacionesxAsignatura();
             var promedios = reporteador.GetPromediosAlumnosxAsignatura();
+            var topPromedios = reporteador.GetTopPromedio(5);
 
             #region Comentarios
             /*

@@ -67,7 +67,8 @@ namespace CoreEscuela.App
             foreach (var item in listaEvalxAsig)
             {
                 var promAlumno = from eval in item.Value
-                                 group eval by new {
+                                 group eval by new
+                                 {
                                      eval.Alumno.UniqueId,
                                      eval.Alumno.Nombre
                                  }
@@ -80,6 +81,21 @@ namespace CoreEscuela.App
                                  };
 
                 rta.Add(item.Key, promAlumno);
+            }
+            return rta;
+        }
+
+        public Dictionary<string, IEnumerable<AlumnoPromedio>> GetTopPromedio(int top)
+        {
+            var rta = new Dictionary<string, IEnumerable<AlumnoPromedio>>();
+            var listEval = GetPromediosAlumnosxAsignatura();
+            foreach (var item in listEval)
+            {
+                var topAlumno = (from AlumnoPromedio eval in item.Value
+                                 orderby eval.Promedio descending
+                                 select eval).Take(top);
+
+                rta.Add(item.Key, topAlumno);
             }
 
             return rta;
